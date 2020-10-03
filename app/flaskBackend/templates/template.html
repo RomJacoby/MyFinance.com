@@ -1,0 +1,17 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - MyFinance.com</title>
+      {% else %}
+      <title>Welcome to MyFinance.com</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>MyFinance.com: 
+          <a href="/">Home</a>
+          <a href="/login">Log-in</a>
+        </div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
