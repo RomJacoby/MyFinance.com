@@ -1,31 +1,36 @@
 from flaskBackend import application
-from flask import render_template,jsonify,request
-from flaskBackend.forms import LoginForm
+from flask import request,jsonify
 from . import db
-from .models import Stock
+from .models import Stock,Index
+import yfinance as yf
 
 @application.route('/')
 def home():
-    return render_template('home.html',funornot='amazing!')
+    return 'homepage'
 
-@application.route('/get_stocks')
-def get_stocks():
+@application.route('/get_all_stocks')
+def get_all_stocks():
     stock_list = Stock.query.all()
-    stocks = []
-    for stock in stock_list:
-        stocks.append({'name':stock.name, 'compnayName':stock.companyName})
-    return jsonify({'stocks':stocks})
-
+    stock = stock_list[0]
+    #passing only one df for now
+    #need to find a way to retrieve stock company name
+    dataframe = yf.download(stock.name,start="2018-07-21", end="2020-07-21")
+    #companyName = dataframe.info["shortName"]
+    dataframe = dataframe.reset_index() 
+    dataframe["Value"] = dataframe["Close"].astype('float64')
+    dataframe_json = dataframe.to_json()
+    return dataframe_json 
+    
 @application.route('/add_stock',methods=['POST'])
 def add_stock():
-    stock_data = request.get_json()
-    new_stock = Stock(name=stock_data['name'], companyName=stock_data['companyName'])
-    db.session.add(new_stock)
+    stock = request.args.get('stockName')
+    db.session.add(Stock(name = stock))
     db.session.commit()
+    return 'Added stock',201
 
-    return 'Done',201
-
-@application.route('/login')
-def login():
-    form = LoginForm()
-    return render_template('login.html',title='please log in',form=form)
+@application.route('/add_index',methods=['POST'])
+def add_index():
+    index = request.args.get('indexName')
+    db.session.add(Index(name = index))
+    db.session.commit()
+    return 'Added index',201
