@@ -7,9 +7,9 @@ tickerSymbol = '^IXIC'
 plt.style.use('ggplot')
 
 #get data on this ticker
-tickerData = yf.Ticker(tickerSymbol)
-print(tickerData.info)
-companyName = tickerData.info["shortName"]
+#tickerData = yf.Ticker(tickerSymbol)
+#print(tickerData.info)
+#companyName = tickerData.info["shortName"]
 #get the historical prices for this ticker
 #tickerDf = tickerData.history(start='2010-1-1', end='2020-1-25')
 
@@ -21,3 +21,6 @@ for i in ['Open', 'High', 'Close', 'Low']:
 tickerDf.plot(x ='Date', y = 'Close', kind = 'line',title = companyName, legend=None)
 
 plt.show()'''
+
+arr = ["1","2"]
+arr.length()
