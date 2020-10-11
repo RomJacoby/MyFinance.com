@@ -6,7 +6,7 @@ from .models import Stock,Index
 import yfinance as yf
 
 def get_stock(stock):
-    #need to find a way to retrieve stock company name
+    #I need to find a way to retrieve stock company name
     dataframe = yf.download(stock.name,start="2018-07-21", end="2020-07-21")
     #companyName = dataframe.info["shortName"]
     dataframe = dataframe.reset_index() 
@@ -31,11 +31,6 @@ def get_stock(stock):
     response_string = stock.name +',' + dates_string + "NowValues," + values_string
     return response_string
 
-@application.route('/')
-@cross_origin()
-def home():
-    return 'homepage'
-
 @application.route('/get_all_stocks')
 @cross_origin()
 def get_all_stocks():
@@ -58,10 +53,23 @@ def replace_stock():
     return (get_stock(foundStock))
 
 
-@application.route('/add_index',methods=['POST'])
+@application.route('/get_all_indices')
 @cross_origin()
-def add_index():
-    index = request.args.get('indexName')
-    db.session.add(Index(name = index))
+def get_all_indices():
+    index_list = Index.query.all()
+    json_indices = {}
+    i = 0
+    for index in index_list:
+        json_indices[i]=get_stock(index)
+        i +=1
+    return (json_indices)
+
+@application.route('/replace_index',methods=['POST'])
+@cross_origin()
+def replace_index():
+    newIndex = request.args.get('indexName')
+    previousIndex = request.args.get('previousIndexName')
+    foundIndex = Index.query.filter_by(name=previousIndex).first()
+    foundIndex.name = newIndex
     db.session.commit()
-    return 'Added index',201
+    return (get_stock(foundIndex))

@@ -1,0 +1,18 @@
+import React, { Component } from 'react';
+import {Navbar,Nav} from 'react-bootstrap';
+
+export default class NavigationBar extends Component{
+    render(){
+        return(
+                <Navbar bg="dark" variant="dark">
+                    <Navbar.Brand href="/">MyFinance.com</Navbar.Brand>
+                    <Nav className="mr-auto">
+                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/Stocks">Stocks</Nav.Link>
+                        <Nav.Link href="/Indices">Indices</Nav.Link>
+                        <Nav.Link href="/The_cripples_page" style={{position:"absolute",left:"95%"}}><i className="material-icons">accessible</i></Nav.Link>
+                    </Nav>  
+                </Navbar>
+        )
+    }
+}

@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, {Component} from 'react'
+import { Row,Card,CardDeck } from "react-bootstrap";
 import Plot from 'react-plotly.js';
 
 export default class StockList extends Component{
@@ -15,12 +16,17 @@ export default class StockList extends Component{
         axios.get('http://localhost:5000/get_all_stocks')
         .then( res => {
             var stocks_arr = []
-            console.log(res.data)
             Object.keys(res.data).forEach(k => {
                 stocks_arr.push(res.data[k])
             })
             this.setState({stocks:stocks_arr})
         } )
+    }
+    
+    getRandomColor() {
+        var colorArr=["#B22222","#20B2AA","#FFA500","#87CEEB","#483D8B","#000000","#556B2F"]
+        var randomColor = colorArr[Math.floor(Math.random()*colorArr.length)];
+        return randomColor;
     }
     
     create_plot(stock){
@@ -47,15 +53,19 @@ export default class StockList extends Component{
             i++;
         });
         return(
-            <div><Plot
+            <div ><Card border="secondary"><Card.Body><Card.Title style={{textAlign:"Center"}}><i className="material-icons" style={{fontSize:"1.5em",position:"absolute",left:"9%",top:"3%"}}>edit</i>{stockName}</Card.Title><Plot
                 data={[
                 {
                     x: datesArr,
                     y: valuesArr,
-                    type: 'line'
+                    fill: "tonexty",
+                    type: 'line',
+                    line:{color:this.getRandomColor()}
+                    
                 }
                 ]}
-                layout={ {title: stockName} }/>
+                layout={ {plot_bgcolor:'#FAF0E6',margin:{l:"30",r :"30",t:"5",b:"30"},width:496,height:400}}/>
+                </Card.Body></Card>
             </div>
         )
     }
@@ -66,7 +76,7 @@ export default class StockList extends Component{
         stock_list.forEach(stock => {
             body.push(this.create_plot(stock))
         });
-        return (<div>{body}</div>)
+        return (<div><CardDeck style={{margin:"5%"}}>{body}</CardDeck></div>)
     }
 
 }

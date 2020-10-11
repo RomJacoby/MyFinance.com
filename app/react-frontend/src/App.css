@@ -28,6 +28,26 @@
   color: #61dafb;
 }
 
+.jumbotron {
+  background-image: url('./catWallpaper.jpg');
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+  background-size: cover;
+  padding-top: 50px;
+  font-weight: bold;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  padding: 100px;
+  border-radius: 50 px;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+.jumbotron h1,p{
+  text-align: center;
+  background-color: #ffffff73;
+  padding: 50px
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
