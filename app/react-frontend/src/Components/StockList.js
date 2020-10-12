@@ -7,9 +7,12 @@ export default class StockList extends Component{
     constructor(){
         super();
         this.state = {
-            stocks:[]
+            stocks:[],
+            colorArr:["#B22222","#20B2AA","#FFA500","#87CEEB","#483D8B","#000000","#556B2F"],
+            datesArr:[],
+            valuesArr:[],
+            stockName:""
         }
-        this.create_plot = this.create_plot.bind(this)
     };
 
     componentDidMount(){
@@ -24,59 +27,71 @@ export default class StockList extends Component{
     }
     
     getRandomColor() {
-        var colorArr=["#B22222","#20B2AA","#FFA500","#87CEEB","#483D8B","#000000","#556B2F"]
-        var randomColor = colorArr[Math.floor(Math.random()*colorArr.length)];
+        var i = Math.floor(Math.random()*this.state.colorArr.length)
+        var randomColor = this.state.colorArr[i];
+        this.setState((state) => {
+            state.colorArr.splice(i,1)
+            return {colorArr:state.colorArr}
+        })
         return randomColor;
     }
     
-    create_plot(stock){
-        var str = String(stock)
-        var stockName = ""
-        var datesArr = []
-        var valuesArr = []
-        var arr = str.split(",")
-        var i = 0
-        var isDate = true
-        for (i=0;i<arr.length;i++){
+    create_body(){
+        var body = []
+        return body = this.state.stocks.map( stock => {
+            var str = String(stock)
+            var responseArr = str.split(",")
+            var i = 0
+            var isDate = true
             
-            if (i == 0){ stockName = arr[0] }
-            else if (arr[i] === "NowValues"){ isDate = false }   
-            else if (isDate == true) { datesArr.push(arr[i]) }
-            else if (isDate == false){ valuesArr.push(arr[i]) }
-        }
-        
-        var i = 0
-        datesArr.forEach(date => { 
-            var parts = date.split('/');
-            var newDate = new Date(parts[0],parts[1] - 1,parts[2]);
-            datesArr[i] = newDate;
-            i++;
-        });
-        return(
-            <div ><Card border="secondary"><Card.Body><Card.Title style={{textAlign:"Center"}}><i className="material-icons" style={{fontSize:"1.5em",position:"absolute",left:"9%",top:"3%"}}>edit</i>{stockName}</Card.Title><Plot
-                data={[
+            for (i=0;i<responseArr.length;i++){
+                if (i == 0){this.setState({stockName:responseArr[i]})}
+                else if ( responseArr[i] === "NowValues" ){ isDate = false }   
+                else if ( isDate == true )
                 {
-                    x: datesArr,
-                    y: valuesArr,
-                    fill: "tonexty",
-                    type: 'line',
-                    line:{color:this.getRandomColor()}
-                    
+                    this.setState((state) => {
+                        state.datesArr.push(responseArr[i])
+                        return {datesArr:state.datesArr} 
+                    })
                 }
-                ]}
-                layout={ {plot_bgcolor:'#FAF0E6',margin:{l:"30",r :"30",t:"5",b:"30"},width:496,height:400}}/>
-                </Card.Body></Card>
-            </div>
-        )
+                else if (isDate == false)
+                {
+                    this.setState((state) => {
+                        state.valuesArr.push(responseArr[i])
+                        return {valuesArr:state.valuesArr} 
+                    })
+                }
+            }
+            
+            var i = 0
+            var datesArr2 = this.state.datesArr
+            datesArr2.forEach(date => { 
+                var parts = String(date).split('/');
+                datesArr2[i] = new Date(parts[0],parts[1] - 1,parts[2]);
+                i++;
+            });
+            this.setState({datesArr:datesArr2})
+            return(
+                <div ><Card border="secondary"><Card.Body><Card.Title style={{textAlign:"Center"}}><i className="material-icons" style={{fontSize:"1.5em",position:"absolute",left:"9%",top:"3%"}}>edit</i>{this.state.stockName}</Card.Title><Plot
+                    data={[
+                    {
+                        x: this.state.datesArr,
+                        y: this.state.valuesArr,
+                        fill: "tonexty",
+                        type: 'line',
+                        line:{color:this.getRandomColor()}
+                        
+                    }
+                    ]}
+                    layout={ {plot_bgcolor:'#FAF0E6',margin:{l:"30",r :"30",t:"5",b:"30"},width:496,height:400}}/>
+                    </Card.Body></Card>
+                </div>
+            )
+        })
     }
     
-    render(){
-        var stock_list = this.state.stocks
-        var body = []
-        stock_list.forEach(stock => {
-            body.push(this.create_plot(stock))
-        });
-        return (<div><CardDeck style={{margin:"5%"}}>{body}</CardDeck></div>)
+    render(){ 
+        return (<div><CardDeck style={{margin:"5%"}}>{this.create_body()}</CardDeck></div>)
     }
 
 }
