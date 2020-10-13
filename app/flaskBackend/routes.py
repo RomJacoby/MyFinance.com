@@ -27,7 +27,7 @@ def get_stock(stock):
         else:
             values_string += str(value) + ","
 
-    #this is the response string for the get_stock request, it contains stock name,dates and values. (i want to add company name)
+    #This is the response string for the get_stock request, it contains stock name,dates and values. (i want to add company name)
     response_string = stock.name +',' + dates_string + "NowValues," + values_string
     return response_string
 
