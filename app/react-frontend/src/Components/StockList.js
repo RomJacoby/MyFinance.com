@@ -2,6 +2,10 @@ import axios from "axios"
 import React, {Component} from 'react'
 import { Card,CardDeck } from "react-bootstrap";
 import Plot from 'react-plotly.js';
+import AOS from 'aos';
+import 'aos/dist/aos.css'
+import ReplaceStock from './ReplaceStock'
+AOS.init();
 
 export default class StockList extends Component{
     constructor(){
@@ -67,12 +71,17 @@ export default class StockList extends Component{
     create_body(){
         var body = ""
         var colorArr = ["#B22222","#20B2AA","#FFA500","#87CEEB","#483D8B","#000000","#556B2F"]
+        var zoomSide = "fade-left"
         //Looping over this.state.stocks, creating and returning the Plots' HTML
         return body = this.state.stocks.map( stock => {
+            if (zoomSide === "fade-right") {zoomSide="fade-left"} else {zoomSide="fade-right"}
             return(
-                <div ><Card border="secondary">
+                <div data-aos={zoomSide} data-aos-duration="1500"><Card border="secondary">
                     <Card.Body>
-                        <Card.Title style={{textAlign:"Center"}}><i className="material-icons" style={{fontSize:"1.5em",position:"absolute",left:"9%",top:"3%"}}>edit</i>{stock.stockName}</Card.Title>
+                        <Card.Title style={{textAlign:"Center",fontSize:"1.7em"}}>
+                            <ReplaceStock stockName={stock.stockName} />
+                            {stock.stockName}
+                        </Card.Title>
                         <Plot
                             data={[
                             {
@@ -98,7 +107,12 @@ export default class StockList extends Component{
     }
 
     render(){ 
-        return (<div><CardDeck style={{margin:"5%"}}>{this.create_body()}</CardDeck></div>)
+        return (<div>
+                    <h1 data-aos="zoom-in" data-aos-duration="1000" style={{textAlign:"center",fontWeight:"550"}}>Stocks</h1>
+                    <br/>
+                    <h3 data-aos="zoom-in-up" data-aos-duration="2000" className="text-muted" style={{textAlign:"center",fontStyle:"oblique",fontWeight:"lighter"}}>Your money, our pleasure.</h3>
+                    <CardDeck style={{margin:"5%",marginTop:"3%"}}>{this.create_body()}</CardDeck>
+                </div>)
     }
 
 }

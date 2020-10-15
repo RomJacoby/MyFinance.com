@@ -6,7 +6,7 @@ from .models import Stock,Index
 import yfinance as yf
 
 def get_stock(stock):
-    #I need to find a way to retrieve stock company name
+    #I need to find a way to retrieve stock company name, and to see if i can get multiple stocks in one hit
     dataframe = yf.download(stock.name,start="2018-07-21", end="2020-07-21")
     #companyName = dataframe.info["shortName"]
     dataframe = dataframe.reset_index() 
@@ -50,8 +50,7 @@ def replace_stock():
     foundStock = Stock.query.filter_by(name=previousStock).first()
     foundStock.name = newStock
     db.session.commit()
-    return (get_stock(foundStock))
-
+    return "Replaced, ya"
 
 @application.route('/get_all_indices')
 @cross_origin()
@@ -72,4 +71,4 @@ def replace_index():
     foundIndex = Index.query.filter_by(name=previousIndex).first()
     foundIndex.name = newIndex
     db.session.commit()
-    return (get_stock(foundIndex))
+    return "Replaced, ya"

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import StockList from './Components/StockList'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import NavigationBar from './Components/NavigationBar'
 import CripplesPage from './Components/CripplesPage'
-import './App.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from './Components/Home';
+import StockList from './Components/StockList'
+import IndexList from './Components/IndexList'
 
 class App extends Component{
   render(){
@@ -17,12 +18,17 @@ class App extends Component{
             <Route path="/Stocks">
               <StockList />
             </Route>
+            <Route path="/Indices">
+              <IndexList />
+            </Route>
+            <Route path="/The_cripples_page">
+              <CripplesPage />
+            </Route>
             <Route path="/">
               <div className="container">
                 <Home />
               </div>  
             </Route>
-            <Route path="/The_cripples_page"><CripplesPage /></Route>
           </Switch>
         </Router>
       </div>
