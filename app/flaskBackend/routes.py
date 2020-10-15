@@ -2,12 +2,30 @@ from flaskBackend import application
 from flask import request,jsonify
 from flask_cors import CORS, cross_origin
 from . import db
+from datetime import datetime
 from .models import Stock,Index
 import yfinance as yf
 
+def get_last_month():
+    today = datetime.today()
+    if today.month == 1:
+        one_month_ago = today.replace(year=today.year - 1, month=12)
+    else:
+        extra_days = 0
+        while True:
+            try:
+                one_month_ago = today.replace(month=today.month - 1, day=today.day - extra_days)
+                break
+            except ValueError:
+                extra_days += 1
+    return one_month_ago.strftime('%Y-%m-%d')
+
 def get_stock(stock):
+    
+    #Get today's time
+    today = datetime.today().strftime('%Y-%m-%d')
     #I need to find a way to retrieve stock company name, and to see if i can get multiple stocks in one hit
-    dataframe = yf.download(stock.name,start="2018-07-21", end="2020-07-21")
+    dataframe = yf.download(stock.name,start=get_last_month(), end=today)
     #companyName = dataframe.info["shortName"]
     dataframe = dataframe.reset_index() 
     dataframe["Value"] = dataframe["Close"].astype('float64')
