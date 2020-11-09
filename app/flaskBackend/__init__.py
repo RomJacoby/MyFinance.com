@@ -1,4 +1,6 @@
 from flask import Flask
+import sys, os
+sys.path.append('/app/')
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
