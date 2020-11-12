@@ -1,0 +1,24 @@
+#Step 1
+FROM node:10.22.1
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY package.json /app
+
+RUN npm install
+
+COPY . /app
+
+ENV NODE_OPTIONS --max_old_space_size=4096
+
+EXPOSE 3000
+
+CMD ["npm","start"]
+
+#Step 2
+#FROM nginx:alpine 
+#EXPOSE 80
+#COPY --from=build-step /app/build /usr/share/nginx/html
+
