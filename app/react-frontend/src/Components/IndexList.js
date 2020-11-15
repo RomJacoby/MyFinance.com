@@ -17,7 +17,7 @@ export default class IndexList extends Component{
 
     //Pushing response indices (as strings) to this.state.indices, then calling a function to parse and arrange everything
     componentDidMount(){
-        axios.get('http://localhost:5000/get_all_indices')
+        axios.get('http://' + process.env.REACT_APP_MY_HOST_IP  + ':5000/get_all_indices')
         .then( res => {
             var indices_arr = []
             Object.keys(res.data).forEach(k => {

@@ -15,3 +15,5 @@ COPY flaskBackend /app/flaskBackend/
 EXPOSE 5000
 
 CMD ["flask","run","--host=0.0.0.0"]
+
+#I need to add a volume in order to save DB changes
