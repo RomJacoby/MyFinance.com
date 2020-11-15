@@ -98,7 +98,7 @@ export default class IndexList extends Component{
             )
         })
     }
-    //Fetches a color from the color array and then poping the color out of it
+    //Fetches a color from the color array and then popping the color out of it
     getRandomColor(colorArr) {
         var i = Math.floor(Math.random()*colorArr.length)
         var randomColor = colorArr[i];
