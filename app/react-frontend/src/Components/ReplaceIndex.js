@@ -16,7 +16,7 @@ function ReplaceIndex(props) {
         //Closes window
         handleClose()
 
-        axios.post('http://localhost:5000/replace_index',{},{headers:{'Access-Control-Allow-Origin': '*'},params:{indexName:newIndexName,previousIndexName:props.indexName}})
+        axios.post('http://' + process.env.REACT_APP_MY_HOST_IP  + ':5000/replace_index',{},{headers:{'Access-Control-Allow-Origin': '*'},params:{indexName:newIndexName,previousIndexName:props.indexName}})
         .then (res => {
             console.log(res.data)
             

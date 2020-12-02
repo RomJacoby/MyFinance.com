@@ -1,0 +1,3 @@
+git add .
+git commit -m "test"
+git push https://romjacoby:RomJJ1414@github.com/RomJacoby/MyFinance.com HEAD:feature

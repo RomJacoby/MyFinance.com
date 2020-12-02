@@ -16,7 +16,7 @@ function ReplaceStock(props) {
         //Closes window
         handleClose()
 
-        axios.post('http://localhost:5000/replace_stock',{},{headers:{'Access-Control-Allow-Origin': '*'},params:{stockName:newStockName,previousStockName:props.stockName}})
+        axios.post('http://' + process.env.REACT_APP_MY_HOST_IP  + ':5000/replace_stock',{},{headers:{'Access-Control-Allow-Origin': '*'},params:{stockName:newStockName,previousStockName:props.stockName}})
         .then (res => {
             console.log(res.data)
             

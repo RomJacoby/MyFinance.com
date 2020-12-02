@@ -10,7 +10,7 @@ export default class NavigationBar extends Component{
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href="/Stocks">Stocks</Nav.Link>
                         <Nav.Link href="/Indices">Indices</Nav.Link>
-                        <Nav.Link href="/The_cripples_page" style={{position:"absolute",left:"95%"}}><i className="material-icons">accessible</i></Nav.Link>
+                        <Nav.Link style={{position:"absolute",left:"95%"}}><i className="material-icons">accessible</i></Nav.Link>
                     </Nav>  
                 </Navbar>
         )
