@@ -9,9 +9,7 @@ pipeline {
     stages {
         stage('Build image for test') {
             when {
-	            allOf {
-                    branch 'feature'
-                }  
+                    branch 'feature'  
 	        }
             steps {
                 script {
