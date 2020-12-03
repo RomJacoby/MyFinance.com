@@ -10,12 +10,12 @@ pipeline {
 
     stages {
         stage('Build image for test') {
-            when {
+            /*when {
 	            allOf {
                     branch 'feature'
                     expression {abort != true}
                 }  
-	        }
+	        }*/
             steps {
                 script {
                     image_id = docker.build("myfinance_backend:${env.BUILD_ID}" , "-f ${dockerfile} ${dockerfile_context}")
