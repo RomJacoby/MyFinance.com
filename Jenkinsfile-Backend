@@ -1,10 +1,9 @@
-
+def api_routes = ["get_all_stocks"]
 pipeline {
     environment{
         image_id = ""
         image_name = "myfinance_backend"
         container_id = ""
-        api_routes = ["get_all_stocks"]
         dockerfile = "Dockerfile-Backend"
         dockerfile_context = "./app/"
         abort = false 
