@@ -1,11 +1,15 @@
-def image_id = ""
-def container_id = ""
-def api_routes = ["get_all_stocks"]
-def dockerfile = "Dockerfile-Backend"
-def dockerfile_context = "./app/"
-def abort = false
 
 pipeline {
+    environment{
+        image_id = ""
+        image_name = "myfinance_backend"
+        container_id = ""
+        api_routes = ["get_all_stocks"]
+        dockerfile = "Dockerfile-Backend"
+        dockerfile_context = "./app/"
+        abort = false 
+    }
+
     agent any
 
     stages {
@@ -18,7 +22,7 @@ pipeline {
 	        }*/
             steps {
                 script {
-                    image_id = docker.build("myfinance_backend:${env.BUILD_ID}" , "-f ${dockerfile} ${dockerfile_context}")
+                    image_id = docker.build("${image_name}:${env.BUILD_ID}" , "-f ${dockerfile} ${dockerfile_context}")
                     if (image == "")
                     {
                         echo 'Could not build Backend image, ABORT pipeline'
