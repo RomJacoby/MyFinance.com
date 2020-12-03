@@ -2,6 +2,7 @@ def image_id = ""
 def container_id = ""
 def api_routes = ["get_all_stocks"]
 def abort = false
+
 pipeline {
     agent any
 
@@ -11,14 +12,16 @@ pipeline {
 	            branch 'feature' && (abort != true)
 	        }
             steps {
-                image_id = sh(script:'docker build -f ./app/Dockerfile-Backend ./app/',returnStdout:true) 
-                if (image == "")
-                {
-                    echo 'Could not build Backend image, ABORT pipeline'
-                    abort = true
-                    currentBuild.result = 'ABORTED'
-                    error('Aborting...')
-                }  
+                script {
+                    image_id = sh(script:'docker build -f ./app/Dockerfile-Backend ./app/',returnStdout:true) 
+                    if (image == "")
+                    {
+                        echo 'Could not build Backend image, ABORT pipeline'
+                        abort = true
+                        currentBuild.result = 'ABORTED'
+                        error('Aborting...')
+                    }
+                }
             }
         }
         stage('Test') {
@@ -26,37 +29,39 @@ pipeline {
                 branch 'feature' && (abort != true)
             }
             steps {
-                container_id = sh(script:"docker run -d --rm -p 100:5000 " + image_id,returnStdout:true)
-                container_status = sh(script:"docker inspect " + container_id,returnStdout:true)
-                if container_status.contains("running")
-                {
-                    for (route in api_routes)
+                script {
+                    container_id = sh(script:"docker run -d --rm -p 100:5000 " + image_id,returnStdout:true)
+                    container_status = sh(script:"docker inspect " + container_id,returnStdout:true)
+                    if (container_status.contains("running"))
                     {
-                        def url = 'http://localhost:100/' + route
-                        def response = httpRequest url
-                        if (response.status != 200)
+                        for (route in api_routes)
                         {
-                            echo "Could not send GET request to ${url}, ABORT pipeline"
-                            abort = true
-                            currentBuild.result = 'ABORTED'
-                            error('Aborting...')
+                            def url = 'http://localhost:100/' + route
+                            def response = httpRequest url
+                            if (response.status != 200)
+                            {
+                                echo "Could not send GET request to ${url}, ABORT pipeline"
+                                abort = true
+                                currentBuild.result = 'ABORTED'
+                                error('Aborting...')
+                            }
+                        }
+                        if (abort == false)
+                        {
+                            echo "Passed all HTTP connectivity tests successfully"
                         }
                     }
-                    if (abort == false)
+                    else
                     {
-                        echo "Passed all HTTP connectivity tests successfully"
+                        echo "Container failed to run, ABORT pipeline"
+                        abort = true
+                        currentBuild.result = 'ABORTED'
+                        error('Aborting...')
                     }
-                }
-                else
-                {
-                    echo "Container failed to run, ABORT pipeline"
-                    abort = true
-                    currentBuild.result = 'ABORTED'
-                    error('Aborting...')
                 }
             }
         }
-        stage('Push to Master') {
+        /*stage('Push to Master') {
             when {
                 branch 'feature' && (abort != true)
             }
@@ -65,7 +70,7 @@ pipeline {
                             sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com'
                 }
             }
-        }
+        }*/
 	    stage('Build image for deploy') {
             when {
                 branch 'master'
@@ -83,5 +88,11 @@ pipeline {
             }
         }
         //add cleanup
+    }
+    post {
+        success{
+           sh "docker kill ${container_id}"
+           sh "docker rmi -f ${image_id}"
+        }
     }
 }
