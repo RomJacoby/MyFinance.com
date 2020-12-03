@@ -9,7 +9,10 @@ pipeline {
     stages {
         stage('Build image for test') {
             when {
-	            branch 'feature' 
+	            allOf {
+                    branch 'feature'
+                    expression {abort != true}
+                }  
 	        }
             steps {
                 script {
@@ -26,8 +29,11 @@ pipeline {
         }
         stage('Test') {
             when {
-                branch 'feature'
-            }
+	            allOf {
+                    branch 'feature'
+                    expression {abort != true}
+                }  
+	        }
             steps {
                 script {
                     container_id = sh(script:"docker run -d --rm -p 100:5000 " + image_id,returnStdout:true)
