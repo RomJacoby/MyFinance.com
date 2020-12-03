@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Build image for test') {
             when {
-	            branch 'feature' && (abort != true)
+	            branch 'feature' 
 	        }
             steps {
                 script {
@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Test') {
             when {
-                branch 'feature' && (abort != true)
+                branch 'feature'
             }
             steps {
                 script {
