@@ -73,7 +73,7 @@ pipeline {
                 }
             }
         }
-        /*stage('Push to Master') {
+        stage('Push to Master') {
             when {
                 allOf {
                     branch 'feature'
@@ -82,10 +82,10 @@ pipeline {
             }
             steps{
                 withCredentials([usernamePassword(credentialsId: 'b09400db-9f0b-4de4-bb24-1f06515eb59a', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                            sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com'
+                            sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com HEAD:master'
                 }
             }
-        }*/
+        }
 	    stage('Build image for deploy') {
             when {
                 branch 'master'
@@ -106,8 +106,13 @@ pipeline {
     }
     post {
         always{
-           sh "docker kill ${container_id}"
-           sh "docker rmi -f ${image_name}"
+            script{
+               if (env.BRANCH_NAME == 'feature')
+               {
+                   sh "docker kill ${container_id}"
+                   sh "docker rmi -f ${image_name}"
+               }
+            }
         }
     }
 }
