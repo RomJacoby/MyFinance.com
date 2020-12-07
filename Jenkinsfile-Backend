@@ -42,7 +42,7 @@ pipeline {
 	        }
             steps {
                 script {
-                    container_id = sh(script:"docker run -d --rm -p 100:5000 ${image_name}",returnStdout:true)
+                    container_id = sh(script:"docker run -d --rm -p 5000:5000 ${image_name}",returnStdout:true)
                     container_status = sh(script:"docker inspect ${container_id}",returnStdout:true)
                     if (container_status.contains("running"))
                     {
@@ -51,7 +51,7 @@ pipeline {
                         {
                             try
                             {
-                                url = 'http://localhost:100/' + route
+                                url = 'http://localhost:5000/' + route
                                 response = httpRequest url
                             } 
                             catch (Exception e)
