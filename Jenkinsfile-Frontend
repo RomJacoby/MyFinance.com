@@ -40,21 +40,23 @@ pipeline {
                 }  
 	        }
             steps {
-                container_id = sh(script:"docker run -d --rm -p 101:80 ${image_name}",returnStdout:true)
-                container_status = sh(script:"docker inspect ${container_id}",returnStdout:true)
-                if (container_status.contains("running"))
-                {
-                    sleep(7)
-                    ip_address = sh(script: "curl -H 'Metadata-Flavor: Google' http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip",returnStdout:true)
-                    echo "Please enter the website http://${ip_address}:101 and test it"
-                    input("After the tests, pick if you want to PROCEED or ABORT the pipeline")
-                }
-                else 
-                {
-                    echo "Container failed to run, ABORT pipeline"
-                    abort = true
-                    currentBuild.result = 'ABORTED'
-                    error('Aborting...')
+                script {
+                    container_id = sh(script:"docker run -d --rm -p 101:80 ${image_name}",returnStdout:true)
+                    container_status = sh(script:"docker inspect ${container_id}",returnStdout:true)
+                    if (container_status.contains("running"))
+                    {
+                        sleep(7)
+                        ip_address = sh(script: "curl -H 'Metadata-Flavor: Google' http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip",returnStdout:true)
+                        echo "Please enter the website http://${ip_address}:101 and test it"
+                        input("After the tests, pick if you want to PROCEED or ABORT the pipeline")
+                    }
+                    else 
+                    {
+                        echo "Container failed to run, ABORT pipeline"
+                        abort = true
+                        currentBuild.result = 'ABORTED'
+                        error('Aborting...')
+                    }
                 }
             }    
         }
