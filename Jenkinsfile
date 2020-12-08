@@ -1,3 +1,5 @@
+// Need to change Jenkins url to match the real one, in order to make the input work.
+
 // Define backend's routes to test
 def api_routes = ["get_all_stocks","get_all_indices"]
 def backend_container_id = ""
