@@ -1,3 +1,4 @@
+// Need to fix changed backend ip in react err.
 // Need to change Jenkins url to match the real one, in order to make the input work.
 
 // Define backend's routes to test
@@ -47,6 +48,8 @@ pipeline {
             } 
             steps {
                 script {
+                    ya=sh (script:'curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip',returnStdout:true)
+                    echo ya
                     docker.build(image_name["frontend"], "--no-cache -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
                     output = sh(script:"docker images ${image_name['frontend']}",returnStdout:true)
                     image_built = output.contains("myfinance_frontend")
