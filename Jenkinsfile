@@ -111,7 +111,7 @@ pipeline {
                 script {
                     frontend_container_id = sh(script:"docker run -d --rm -p 80:80 ${image_name['frontend']}",returnStdout:true)
                     frontend_container_status = sh(script:"docker inspect ${frontend_container_id}",returnStdout:true)
-                    if (rontend_container_status.contains("running"))
+                    if (frontend_container_status.contains("running"))
                     {
                         sleep(7)
                         ip_address = sh(script: "curl -H 'Metadata-Flavor: Google' http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip",returnStdout:true)
