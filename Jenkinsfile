@@ -47,7 +47,7 @@ pipeline {
             } 
             steps {
                 script {
-                    docker.build(image_name["frontend"], "-f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
+                    docker.build(image_name["frontend"], "--no-cache -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
                     output = sh(script:"docker images ${image_name['frontend']}",returnStdout:true)
                     image_built = output.contains("myfinance_frontend")
                     if (image_built == false)
