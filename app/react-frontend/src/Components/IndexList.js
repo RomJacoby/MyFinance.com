@@ -1,6 +1,7 @@
 import axios from "axios"
 import React, {Component} from 'react'
-import { Card,CardDeck } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import CardDeck from "react-bootstrap/CardDeck";
 import Plot from 'react-plotly.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css'

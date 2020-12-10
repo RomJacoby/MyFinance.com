@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import axios from "axios"
-import { Button,Modal } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal"
 
 function ReplaceIndex(props) {
     const [show, setShow] = useState(false);
