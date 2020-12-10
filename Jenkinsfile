@@ -165,6 +165,7 @@ pipeline {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                     sh "docker push romjacoby/myfinance_frontend_${env.BUILD_ID}"
                     sh "docker push romjacoby/myfinance_backend_${env.BUILD_ID}"
+                }
             } 
         }
     }
