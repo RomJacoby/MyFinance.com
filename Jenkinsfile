@@ -29,7 +29,7 @@ pipeline {
                     docker.build(image_name["backend"] , "-f ${dockerfile['backend']} ${dockerfile_context['backend']}")
                     output = sh(script:"docker images ${image_name['backend']}",returnStdout:true)
                     image_built = output.contains("myfinance_backend")
-                    if (image_built == false)
+                    if ( image_built == false )
                     {
                         echo 'Could not build Backend image, ABORT pipeline'
                         abort = true
@@ -50,7 +50,7 @@ pipeline {
                 script {
                     ya=sh (script:'curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip',returnStdout:true)
                     echo ya
-                    docker.build(image_name["frontend"], "--no-cache -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
+                    docker.build(image_name["frontend"], "--no-cache"," -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
                     output = sh(script:"docker images ${image_name['frontend']}",returnStdout:true)
                     image_built = output.contains("myfinance_frontend")
                     if (image_built == false)

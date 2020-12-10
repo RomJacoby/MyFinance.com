@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "C:\\Program Files\\Rom\\downloads\\python_installation\\python.exe",
+    "python.pythonPath": "venv\\Scripts\\python.exe",
     "git.ignoreLimitWarning": true
 }
