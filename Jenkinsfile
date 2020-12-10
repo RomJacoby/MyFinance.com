@@ -161,8 +161,10 @@ pipeline {
                 }
             }
             steps{
-                sh "docker push romjacoby/myfinance_frontend_${env.BUILD_ID}"
-                sh "docker push romjacoby/myfinance_backend_${env.BUILD_ID}"
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]){
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    sh "docker push romjacoby/myfinance_frontend_${env.BUILD_ID}"
+                    sh "docker push romjacoby/myfinance_backend_${env.BUILD_ID}"
             } 
         }
     }
@@ -172,10 +174,16 @@ pipeline {
                if (env.BRANCH_NAME == 'feature')
                {
                    sh "docker kill ${backend_container_id}"
-                   sh "docker rmi -f ${image_name['backend']}"
                    sh "docker kill ${frontend_container_id}"
+               }
+            }
+        }
+        success{
+            script{
+               if (env.BRANCH_NAME == 'feature')
+               {
+                   sh "docker rmi -f ${image_name['backend']}"
                    sh "docker rmi -f ${image_name['frontend']}"
-
                }
             }
         }       
