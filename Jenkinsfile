@@ -1,6 +1,5 @@
 // Need to fix changed backend ip in react err.
 
-// Define backend's routes to test
 def api_routes = ["get_all_stocks","get_all_indices"]
 def backend_container_id = ""
 def frontend_container_id = ""
@@ -128,7 +127,7 @@ pipeline {
                 }
             }    
         }
-        stage('Push to Master branch') {
+        stage('Push code to Master branch') {
             when {
                 allOf {
                     branch 'feature'
@@ -140,6 +139,31 @@ pipeline {
                             sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com HEAD:master'
                 }
             }
+        }
+        stage('Tag latest docker images') {
+            when {
+                allOf {
+                    branch 'feature'
+                    expression {abort != true}
+                }
+            }
+            steps{
+
+                sh "docker tag ${image_name["frontend"]} romjacoby/myfinance_frontend_${env.BUILD_ID}"
+                sh "docker tag ${image_name["backend"]} romjacoby/myfinance_backend_${env.BUILD_ID}" 
+            }
+        }
+        stage('Push images to dockerhub') {
+            when {
+                allOf {
+                    branch 'feature'
+                    expression {abort != true}
+                }
+            }
+            steps{
+                sh "docker push romjacoby/myfinance_frontend_${env.BUILD_ID}"
+                sh "docker push romjacoby/myfinance_backend_${env.BUILD_ID}"
+            } 
         }
     }
     post {
