@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import axios from "axios"
 import { Button,Modal } from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ReplaceIndex(props) {
     const [show, setShow] = useState(false);
