@@ -1,5 +1,4 @@
 // Need to fix changed backend ip in react err.
-// Need to change Jenkins url to match the real one, in order to make the input work.
 
 // Define backend's routes to test
 def api_routes = ["get_all_stocks","get_all_indices"]
@@ -48,7 +47,7 @@ pipeline {
             } 
             steps {
                 script {
-                    docker.build(image_name["frontend"], "--no-cache"," -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
+                    docker.build(image_name["frontend"], "--no-cache -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
                     output = sh(script:"docker images ${image_name['frontend']}",returnStdout:true)
                     image_built = output.contains("myfinance_frontend")
                     if (image_built == false)
