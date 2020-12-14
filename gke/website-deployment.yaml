@@ -1,0 +1,28 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfinance
+  labels:
+    app: myfinance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myfinance
+  template:
+    metadata:
+      labels:
+        app: myfinance
+    spec:
+      containers:
+
+      - name: backend
+        image: BACKEND_IMAGE
+        ports:
+        - containerPort: 5000
+
+      - name: frontend
+        image: FRONTEND_IMAGE
+        ports:
+        - containerPort: 80
+          name: http-port

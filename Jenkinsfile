@@ -9,7 +9,13 @@ def dockerfile_context = ["frontend" : "./app/react-frontend/" , "backend" : "./
 
 pipeline {
     environment {
-        abort = false    
+        abort = false
+        // GKE variables
+        PROJECT_ID = 'esoteric-sled-295417'
+        CLUSTER_NAME = 'cluster-1'
+        ZONE = 'us-central1-c'
+        MANIFEST_PATTERN = './gke/website-deployment.yaml'
+        GCP_CREDENTIALS_ID = '97d4b057-b20a-4768-bf24-02b91fcc69d9'
     }
 
     agent any
@@ -168,6 +174,34 @@ pipeline {
                 }
             } 
         }
+        stage('Update k8s manifest'){
+            when {
+                allOf {
+                    branch 'master'
+                    expression {abort != true}
+                }
+            }
+            steps{
+                sh "sed -i s#BACKEND_IMAGE#romjacoby/myfinance_backend_${env.BUILD_ID}#g ./gke/website-deployment.yaml"
+                sh "sed -i s#FRONTEND_IMAGE#romjacoby/myfinance_frontend_${env.BUILD_ID}#g ./gke/website-deployment.yaml"
+            }
+        }
+        stage('Deploy to GKE'){
+            when {
+                allOf {
+                    branch 'master'
+                    expression {abort != true}
+                }
+            }
+            steps{
+               step([$class: 'KubernetesEngineBuilder', 
+                        projectId: env.PROJECT_ID,
+                        clusterName: env.CLUSTER_NAME,
+                        zone: env.ZONE,
+                        manifestPattern: env.MANIFEST_PATTERN,
+                        credentialsId: env.GCP_CREDENTIALS_ID]) 
+            }
+        }
     }
     post {
         always{
@@ -185,6 +219,10 @@ pipeline {
                {
                    sh "docker rmi -f ${image_name['backend']}"
                    sh "docker rmi -f ${image_name['frontend']}"
+               }
+               else if ( env.BRANCH_NAME == 'master' )
+               {
+                   echo 'Website deployed successfully to GKE!'
                }
             }
         }       
