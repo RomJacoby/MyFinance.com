@@ -53,7 +53,7 @@ pipeline {
             } 
             steps {
                 script {
-                    docker.build(image_name["frontend"], "--no-cache -f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
+                    docker.build(image_name["frontend"], "-f ${dockerfile['frontend']} ${dockerfile_context['frontend']}")
                     output = sh(script:"docker images ${image_name['frontend']}",returnStdout:true)
                     image_built = output.contains("myfinance_frontend")
                     if (image_built == false)
@@ -134,19 +134,6 @@ pipeline {
                 }
             }    
         }
-        stage('Push code to Master branch') {
-            when {
-                allOf {
-                    branch 'feature'
-                    expression {abort != true}
-                }
-            }
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'b09400db-9f0b-4de4-bb24-1f06515eb59a', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                            sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com HEAD:master'
-                }
-            }
-        }
         stage('Tag latest docker images') {
             when {
                 allOf {
@@ -174,6 +161,19 @@ pipeline {
                     sh "docker push romjacoby/myfinance_backend_${env.BUILD_ID}"
                 }
             } 
+        }
+        stage('Push code to Master branch') {
+            when {
+                allOf {
+                    branch 'feature'
+                    expression {abort != true}
+                }
+            }
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'b09400db-9f0b-4de4-bb24-1f06515eb59a', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/RomJacoby/MyFinance.com HEAD:master'
+                }
+            }
         }
         stage('Update k8s manifest'){
             when {

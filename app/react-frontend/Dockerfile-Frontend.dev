@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . /app
 
-ENV NODE_OPTIONS --max_old_space_size=8192
+ENV NODE_OPTIONS --max_old_space_size=15360
 
 EXPOSE 3000
 
