@@ -6,6 +6,7 @@ def frontend_container_id = ""
 def image_name = ["frontend" : "myfinance_frontend:${env.BUILD_ID}" , "backend" : "myfinance_backend:${env.BUILD_ID}"]
 def dockerfile = ["frontend" : "./app/react-frontend/Dockerfile-Frontend" , "backend" : "./app/Dockerfile-Backend"]
 def dockerfile_context = ["frontend" : "./app/react-frontend/" , "backend" : "./app/"]
+def feature_build_id = Jenkins.instance.getItem('CI-CD Pipeline').getItem('feature').lastSuccessfulBuild.number
 
 pipeline {
     environment {
@@ -182,8 +183,8 @@ pipeline {
                 }
             }
             steps{
-                sh "sed -i s#BACKEND_IMAGE#romjacoby/myfinance_backend_${env.BUILD_ID}#g ./gke/website-deployment.yaml"
-                sh "sed -i s#FRONTEND_IMAGE#romjacoby/myfinance_frontend_${env.BUILD_ID}#g ./gke/website-deployment.yaml"
+                sh "sed -i s#BACKEND_IMAGE#romjacoby/myfinance_backend_${feature_build_id}#g ./gke/website-deployment.yaml"
+                sh "sed -i s#FRONTEND_IMAGE#romjacoby/myfinance_frontend_${feature_build_id}#g ./gke/website-deployment.yaml"
             }
         }
         stage('Deploy to GKE'){
