@@ -9,8 +9,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN apk add curl && export MY_HOST_IP=`curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip`; (echo -n 'REACT_APP_MY_HOST_IP = ';echo $MY_HOST_IP) > .env
-
 ENV NODE_OPTIONS --max_old_space_size=8192
 
 EXPOSE 3000
