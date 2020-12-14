@@ -16,7 +16,7 @@ pipeline {
         CLUSTER_NAME = 'cluster-1'
         ZONE = 'us-central1-c'
         MANIFEST_PATTERN = './gke/website-deployment.yaml'
-        GCP_CREDENTIALS_ID = 'gcp-creds'
+        GCP_CREDENTIALS_ID = 'Finance Project'
     }
 
     agent any
