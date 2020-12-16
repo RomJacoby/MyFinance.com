@@ -1,5 +1,3 @@
-// Need to fix changed backend ip in react err?.
-
 def api_routes = ["get_all_stocks","get_all_indices"]
 def backend_container_id = ""
 def frontend_container_id = ""
