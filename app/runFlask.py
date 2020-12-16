@@ -1,1 +1,1 @@
-from 'flask-backend' import application
+from flask_backend import application
