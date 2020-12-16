@@ -2,8 +2,8 @@ def api_routes = ["get_all_stocks","get_all_indices"]
 def backend_container_id = ""
 def frontend_container_id = ""
 def image_name = ["frontend" : "myfinance_frontend:${env.BUILD_ID}" , "backend" : "myfinance_backend:${env.BUILD_ID}"]
-def dockerfile = ["frontend" : "./app/react_frontend/Dockerfile-Frontend" , "backend" : "./app/Dockerfile-Backend"]
-def dockerfile_context = ["frontend" : "./app/react_frontend/" , "backend" : "./app/"]
+def dockerfile = ["frontend" : "./app/react-frontend/Dockerfile-Frontend" , "backend" : "./app/Dockerfile-Backend"]
+def dockerfile_context = ["frontend" : "./app/react-frontend/" , "backend" : "./app/"]
 def feature_build_id = Jenkins.instance.getItem('MyFinance.com').getItem('CI-CD Pipeline').getItem('feature').lastSuccessfulBuild.number
 
 pipeline {
