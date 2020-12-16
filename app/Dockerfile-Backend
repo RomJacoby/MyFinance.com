@@ -10,7 +10,7 @@ RUN apt update && apt install -y vim
 
 COPY .flaskenv application.db config.py runFlask.py /app/
 
-COPY flaskBackend /app/flaskBackend/
+COPY flask-backend /app/flask-backend/
 
 EXPOSE 5000
 
