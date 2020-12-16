@@ -3,6 +3,7 @@ from flask import request,jsonify
 from flask_cors import CORS, cross_origin
 from . import db
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from .models import Stock,Index
 import yfinance as yf
 
@@ -24,8 +25,9 @@ def get_stock(stock):
     
     #Get today's time
     today = datetime.today().strftime('%Y-%m-%d')
+    year_ago = datetime.now() - relativedelta(years=1)
     #I need to find a way to retrieve stock company name, and to see if i can get multiple stocks in one hit
-    dataframe = yf.download(stock.name,start=get_last_month(), end=today)
+    dataframe = yf.download(stock.name,start=year_ago, end=today)
     #companyName = dataframe.info["shortName"]
     dataframe = dataframe.reset_index() 
     dataframe["Value"] = dataframe["Close"].astype('float64')
