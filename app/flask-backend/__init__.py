@@ -10,4 +10,4 @@ cors = CORS(application)
 application.config.from_object(Config)
 db = SQLAlchemy(application)
 
-from flaskBackend import routes, models
+from flask-backend import routes, models
