@@ -9,7 +9,6 @@ def feature_build_id = Jenkins.instance.getItem('MyFinance.com').getItem('CI-CD 
 pipeline {
     environment {
         abort = false
-        // GKE variables
         PROJECT_ID = 'esoteric-sled-295417'
         CLUSTER_NAME = 'cluster-1'
         ZONE = 'us-central1-c'
