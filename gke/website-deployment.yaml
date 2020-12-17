@@ -5,7 +5,7 @@ metadata:
   labels:
     app: myfinance
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: myfinance
@@ -14,13 +14,18 @@ spec:
       labels:
         app: myfinance
     spec:
+      volumes:
+        - name: pvc-nfs
+          persistentVolumeClaim:
+            claimName: nfs
       containers:
-
       - name: backend
         image: BACKEND_IMAGE
         ports:
         - containerPort: 5000
-
+        volumeMounts:
+          - mountPath: "/app"
+            name: pvc-nfs        
       - name: frontend
         image: FRONTEND_IMAGE
         ports:
