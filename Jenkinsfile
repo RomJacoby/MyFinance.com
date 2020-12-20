@@ -199,21 +199,23 @@ pipeline {
                 branch 'master'
             }
             steps{
-                sleep(10)
-                for (route in api_routes)
-                {
-                    try
+                script {
+                    sleep(10)
+                    for (route in api_routes)
                     {
-                        url = 'http://34.123.148.128:5000/' + route
-                        response = httpRequest url
-                    } 
-                    catch (Exception e)
-                    {
-                        echo "Could not send GET request to ${url}!"
-                        echo "Please visit http://34.123.148.128:80, and decide whether you want to roll back the deployment or not."
-                        abort = true
-                        currentBuild.result = 'ABORTED'
-                        error('Aborting...')
+                        try
+                        {
+                            url = 'http://34.123.148.128:5000/' + route
+                            response = httpRequest url
+                        } 
+                        catch (Exception e)
+                        {
+                            echo "Could not send GET request to ${url}!"
+                            echo "Please visit http://34.123.148.128:80, and decide whether you want to roll back the deployment or not."
+                            abort = true
+                            currentBuild.result = 'ABORTED'
+                            error('Aborting...')
+                        }
                     }
                 }    
             }
