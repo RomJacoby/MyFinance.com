@@ -174,10 +174,7 @@ pipeline {
         }
         stage('Update k8s manifest'){
             when {
-                allOf {
-                    branch 'master'
-                    expression {abort != true}
-                }
+                branch 'master'
             }
             steps{
                 sh "sed -i s#BACKEND_IMAGE#romjacoby/myfinance_backend_${feature_build_id}#g ./gke/website-deployment.yaml"
@@ -186,18 +183,39 @@ pipeline {
         }
         stage('Deploy to GKE'){
             when {
-                allOf {
-                    branch 'master'
-                    expression {abort != true}
-                }
+                branch 'master'
             }
             steps{
-               step([$class: 'KubernetesEngineBuilder', 
+                step([$class: 'KubernetesEngineBuilder', 
                         projectId: env.PROJECT_ID,
                         clusterName: env.CLUSTER_NAME,
                         zone: env.ZONE,
                         manifestPattern: env.MANIFEST_PATTERN,
                         credentialsId: env.GCP_CREDENTIALS_ID]) 
+            }
+        }
+        stage('Test GKE deployment'){
+            when {
+                branch 'master'
+            }
+            steps{
+                sleep(10)
+                for (route in api_routes)
+                {
+                    try
+                    {
+                        url = 'http://34.123.148.128:5000/' + route
+                        response = httpRequest url
+                    } 
+                    catch (Exception e)
+                    {
+                        echo "Could not send GET request to ${url}!"
+                        echo "Please visit http://34.123.148.128:80, and decide whether you want to roll back the deployment or not."
+                        abort = true
+                        currentBuild.result = 'ABORTED'
+                        error('Aborting...')
+                    }
+                }    
             }
         }
     }
@@ -221,6 +239,7 @@ pipeline {
                else if ( env.BRANCH_NAME == 'master' )
                {
                    echo 'Website deployed successfully to GKE!'
+                   echo 'Please visit http://34.123.148.128:80 in order to see it'
                }
             }
         }       
