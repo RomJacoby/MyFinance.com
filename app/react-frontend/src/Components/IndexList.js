@@ -111,7 +111,7 @@ export default class IndexList extends Component{
         return (<div>
                     <h1 data-aos="zoom-in" data-aos-duration="1000" style={{textAlign:"center",fontWeight:"550"}}>Indices</h1>
                     <br/>
-                    <h3 data-aos="zoom-in-up" data-aos-duration="2000" className="text-muted" style={{textAlign:"center",fontStyle:"oblique",fontWeight:"lighter"}}>Our pleasure, yes.</h3>
+                    <h3 data-aos="zoom-in-up" data-aos-duration="2000" className="text-muted" style={{textAlign:"center",fontStyle:"oblique",fontWeight:"lighter"}}>Much pleasure, yes.</h3>
                     <CardDeck style={{margin:"5%",marginTop:"3%"}}>{this.create_body()}</CardDeck>
                 </div>)
     }

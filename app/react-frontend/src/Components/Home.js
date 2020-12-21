@@ -5,8 +5,8 @@ export default class Home extends Component{
     render(){
         return(
             <Jumbotron>
-                <h1>Explore your inner self with our brand new website</h1>
-                <p>Designed to give you maximum knowledge in minimum time</p>
+                <h1>Explore your inner self with our brand new bla bla bla</h1>
+                <p>Designed to give you maximum knowledge in minimum bla bla</p>
             </Jumbotron>)
     }
 }
