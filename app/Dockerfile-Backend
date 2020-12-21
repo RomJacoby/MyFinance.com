@@ -15,5 +15,3 @@ COPY flask_backend /app/flask_backend/
 EXPOSE 5000
 
 CMD ["flask","run","--host=0.0.0.0"]
-
-#Need to mount application.db to local FS with docker volume
