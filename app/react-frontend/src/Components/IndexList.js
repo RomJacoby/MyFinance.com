@@ -33,7 +33,7 @@ export default class IndexList extends Component{
     update_state(){
         this.setState(state => {  
             
-            //this is the final array, which this.state.indices will be equal to.
+            //Final array, which this.state.indices will be equal to.
             var indicesArr = []
             
             //Looping over the strings in order to parse them
@@ -61,10 +61,10 @@ export default class IndexList extends Component{
                         valuesArr.push(responseArr[i])
                     }
                 }
-                //pushing each index's details to indicesArr
+                //Pushing each index's details to indicesArr
                 indicesArr.push({"datesArr":datesArr,"valuesArr":valuesArr,"indexName":indexName})
             })
-            //returning new state 
+            //Returning new state 
             return {indices:indicesArr}
         })
     }

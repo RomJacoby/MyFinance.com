@@ -33,7 +33,7 @@ export default class StockList extends Component{
     update_state(){
         this.setState(state => {  
             
-            //this is the final array, which this.state.stocks will be equal to.
+            //Final array, which this.state.stocks will be equal to.
             var stocksArr = []
             
             //Looping over the strings in order to parse them
@@ -61,10 +61,10 @@ export default class StockList extends Component{
                         valuesArr.push(responseArr[i])
                     }
                 }
-                //pushing each stock's details to stocksArr
+                //Pushing each stock's details to stocksArr
                 stocksArr.push({"datesArr":datesArr,"valuesArr":valuesArr,"stockName":stockName})
             })
-            //returning new state 
+            //Returning new state 
             return {stocks:stocksArr}
         })
     }
